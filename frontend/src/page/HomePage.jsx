@@ -1,26 +1,20 @@
-//import React from 'react';
 import "../assets/HomePage.css";
 import { Card } from "react-bootstrap";
-import Event from "../components/Event";
+import CarouselEvents from "../components/CarouselEvents";
 
-
-function HomePage() {
+function HomePage({ eventos }) {
   return (
     <div className="Homepage">
-      {/* Sección Principal */}
       <Card className="card_homPa">
         <header className="main-header">
           <h1>MeetUs</h1>
           <p>Encuentra eventos de tu interés, conéctate con personas y participa en actividades locales y en línea.</p>
         </header>
       </Card>
-
-      {/* Lista de eventos cercanos */}
       <section className="nearEvent">
         <h1>Eventos cerca de ti</h1>
-        <Event />
+        <CarouselEvents eventos={eventos} />
       </section>
-
       <footer className="footer">
         <p>&copy; 2024 MEETUS - Todos los derechos reservados</p>
       </footer>
