@@ -9,6 +9,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 
 const App = () => {
+  const [eventos, setEventos] = useState([
+    {
+      id: '001',
+      nombre: 'Evento de Prueba',
+      descripcion: 'Este es un evento de prueba.',
+      organizadorId: 'Organizador 1',
+      tipo: 'Presencial',
+      fechaHoraInicio: '2023-10-01T10:00',
+      fechaHoraFin: '2023-10-01T12:00',
+      lugar: 'Lugar de Prueba',
+      precio: '100',
+      linkOnline: 'http://example.com'
+    }
+  ]);
+
+  const agregarEvento = (nuevoEvento) => {
+    setEventos([...eventos, nuevoEvento]);
+  };
+
   return (
     <BrowserRouter>
       <Layout>
