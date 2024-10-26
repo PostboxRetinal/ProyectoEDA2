@@ -3,16 +3,20 @@ import "../assets/Homepage.css";
 import FechaEvento from "../components/FechaEvento";
 import LugarEvento from "../components/lugarEvento";
 import CommentSystem from "../components/Valoraciones";
+import { useParams } from "react-router-dom";
 
+const Informacion = ({ eventos }) => {
+  const { id } = useParams();
+  const evento = eventos.find(evento => evento.id === id);
 
+  if (!evento) {
+    return <p>Evento no encontrado</p>;
+  }
 
-const Informacion = (props) => {
-  const { nombre = "Pyday", descripcion, organizadorId, tipo, linkOnline, categoria, capacidadAsistentes, precio, fechaHoraInicio, fechaHoraFin, direccion } = props;
+  const { nombre, descripcion, organizadorId, tipo, categoria, precio, fechaHoraInicio, fechaHoraFin, linkOnline } = evento;
 
   return (
     <>
-
-
       <Card style={{ width: "80rem", margin: "0 auto", marginTop: "40px" }}>
         <Card.Header>
           <h2>{nombre}</h2>
@@ -23,25 +27,17 @@ const Informacion = (props) => {
           </p>
           <p>{linkOnline}</p>
           <p>categoría: {categoria}</p>
+          <FechaEvento fechaHoraInicio={fechaHoraInicio} fechaHoraFin={fechaHoraFin} />
+          <LugarEvento lugar={evento.lugar} />
+          <p>Precio: {precio}</p>
         </Card.Body>
         <Card.Footer>
           <div>
-            <span>tipo:</span> {tipo}
+            <span>Tipo:</span> {tipo}
           </div>
-          <div>
-            <span>Capacidad:</span> {capacidadAsistentes}
-          </div>
-          <div>
-            <span>Precio:</span> {precio}
-          </div>
-          <div>
-            <span>Fecha:</span>
-            <FechaEvento fechaHoraInicio={fechaHoraInicio} fechaHoraFin={fechaHoraFin} />
-            <LugarEvento direccion={direccion} />
-          </div>
+          <CommentSystem valoraciones={evento.valoraciones} />
         </Card.Footer>
       </Card>
-      <CommentSystem title="Comentarios sobre este evento" />
     </>
   );
 };
