@@ -1,8 +1,8 @@
 //import React from 'react';
-import "../assets/Homepage.css";
+import "../assets/HomePage.css";
 import { Card } from "react-bootstrap";
 import Event from "../components/Event";
-import Nav from "../Layouts/Layout";
+
 
 function HomePage() {
   return (
