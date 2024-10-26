@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./page/HomePage";
 import Informacion from "./page/infoEvento";
 import IniciarSesion from "./page/Login";
@@ -12,10 +12,11 @@ const App= () => {
     <BrowserRouter>
        <Layout>
         <Routes>
-          <Route path="/HomePage" element={<HomePage/>} />
+          <Route path="/" element={<HomePage/>} />
           <Route path="/Login" element={<IniciarSesion />} />
           <Route path="/infoEvento" element={<Informacion />} />
           <Route path="/Register" element={<Registro />} />
+          <Route path="/*" element={<Navigate to = "/"  />} />
         </Routes>
       </Layout>
     </BrowserRouter>

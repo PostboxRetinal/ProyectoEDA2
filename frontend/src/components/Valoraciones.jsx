@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
-const ratingOptions = ['malo', 'regular', 'bueno', 'excelente'];
+const ratingOptions = ['Malo', 'Regular', 'Bueno', 'Excelente'];
 
 const CommentForm = ({ onSubmit }) => {
   const [newComment, setNewComment] = useState({ username: '', rating: '', content: '' });
@@ -38,7 +38,7 @@ const CommentForm = ({ onSubmit }) => {
         <label className="block mb-2">Calificación:</label>
         <div className="flex space-x-2">
           {ratingOptions.map((option) => (
-            <label key={option} className="flex items-center">
+            <label key={option} className="flex items-center" style={{margin:'5px'}}>
               <input
                 type="radio"
                 name="rating"
@@ -48,7 +48,7 @@ const CommentForm = ({ onSubmit }) => {
                 className="mr-1"
                 required
               />
-              {option}
+              {" "} {option}
             </label>
           ))}
         </div>
