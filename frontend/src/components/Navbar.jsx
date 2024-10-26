@@ -14,6 +14,7 @@ function NavbarComponente() {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/Login">Iniciar sesion</Nav.Link>
             <Nav.Link href="/Register">Registrarse</Nav.Link>
+            <Nav.Link href="/AgregarEvento">Nuevo evento</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
