@@ -1,80 +1,54 @@
-.Homepage{
+/* Página de inicio principal */
+.Homepage {
   text-align: center;
-  padding: 40px;
-  font-family: 'Arial', sans-serif;
-}
-
-.navbar {
-  position:sticky;
-  background-color:white;
-  left: 0;
-  padding: 30px;
-  width: 100%;
-  box-sizing: border-box;
-}
-.card_homPa{
-  background-color: #fdba74;
   padding: 20px;
-  h1{font-size: 400%};
-  h1{font-family: Andale Mono, monospace};
-  p{font-family: Andale Mono, monospace};
-  p{font-size: 110%};
-  margin: 30px auto;
-  font-size: 20px;
-  color: #503e69;
-  font-family: Arial Narrow, sans-serif;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #ff6265, #ffa943);
+  color: #333;
+}
+
+/* Encabezado principal */
+.card_homPa {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-.search_button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-right: 600px;
-
-}
-.button_session {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-left: 10px;
-  margin-right: 0px;
-}
-.button_regis {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-left: 195px;
-  margin-right: 0px;
+.card_homPa h1 {
+  font-size: 2.5rem;
+  color: #ff3e57;
+  margin: 0;
 }
 
-.title_homPa{
-  color: rgb(255, 252, 252);
-  h1{font-size: 500%};
-  font-family: Andale Mono, monospace;
-  font-weight: 400%;
-  font-size: 400%;
-  width: 100%;
+.card_homPa p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 10px;
 }
 
-.search_bar{
-    padding:6px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 300px;
-    font-family: Arial Narrow, sans-serif;
+/* Sección de eventos */
+.nearEvent {
+  margin-top: 40px;
 }
 
-.nearEvent{
-  h1{font-size: 400%};
-  h1{font-family: Andale Mono, monospace};
-  h1{color: #503e69};
-  margin-top: 50px;
+.nearEvent h1 {
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.footer p {
+  margin: 0;
 }
