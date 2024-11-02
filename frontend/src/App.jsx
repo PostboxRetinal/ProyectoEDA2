@@ -12,7 +12,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <Layout>
-      <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} /> {/* Ruta principal */}
           <Route path="/HomePage" element={<HomePage />} />
@@ -26,7 +25,6 @@ const App = () => {
       </Layout>
     </BrowserRouter>
   );
-};
 };
 
 export default App;
