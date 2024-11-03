@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import '../assets/Login.css'
+import '../assets/ProjectCSS/Login.css';
 import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faGoogle, faApple } from '@fortawesome/free-brands-svg-icons';
+import Api from '../service/Api';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -10,46 +9,53 @@ function Login({ onLogin }) {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Email:", email, "Password:", password, "Remember me:", rememberMe);
-
-    if (email && password) {
-      onLogin(true); // Actualiza el estado de inicio de sesión en App.jsx
-      navigate('/'); // Redirige a la página de inicio
-    } else {
+    if (!email || !password) {
       alert('Por favor, ingresa tus credenciales.');
+      return;
+    }
+
+    try {
+      const response = await Api.post('/login', { email, password });
+      const token = response.data.token;
+      if (token) {
+        localStorage.setItem('token', token);
+        onLogin(true);
+        navigate('/');
+      } else {
+        alert('Error en el inicio de sesión: Token no recibido');
+      }
+    } catch (error) {
+      console.error('Error en el inicio de sesión:', error);
+      alert('Error en el inicio de sesión. Verifica tus credenciales e inténtalo de nuevo.');
     }
   };
 
   return (
     <div className="login-container">
       <div className="login-form">
-        <h2>Inicia sesión</h2>
-        <p>¿Aún no eres miembro? <a href="/register">Regístrate</a></p>
+        <h2>Iniciar Sesión</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Correo electrónico</label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Ingresa tu correo"
+              placeholder="Email"
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Contraseña</label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Ingresa tu contraseña"
+              placeholder="Password"
               required
             />
-            <a href="/forgot-password" className="forgot-password-link">He olvidado la contraseña</a>
           </div>
           <div className="form-group">
             <input
@@ -58,28 +64,11 @@ function Login({ onLogin }) {
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
             />
-            <label htmlFor="rememberMe">Mantener la sesión iniciada</label>
+            <label htmlFor="rememberMe">Remember Password</label>
           </div>
-          <div className="form-group captcha">
-            <input type="checkbox" id="recaptcha" required />
-            <label htmlFor="recaptcha">No soy un robot</label>
-          </div>
-          <button type="submit" className="login-btn">Inicia sesión</button>
+          <button type="submit" className="login-btn">Login</button>
         </form>
-        <div className="login-with">
-          <p>O inicia sesión con:</p>
-          <div className="social-login">
-            <button className="facebook-btn">
-              <FontAwesomeIcon icon={faFacebookF} /> Inicia sesión con Facebook
-            </button>
-            <button className="google-btn">
-              <FontAwesomeIcon icon={faGoogle} /> Inicia sesión con Google
-            </button>
-            <button className="apple-btn">
-              <FontAwesomeIcon icon={faApple} /> Inicia sesión con Apple
-            </button>
-          </div>
-        </div>
+        <p>Don’t have an account? <a href="/register">Register</a></p>
         <a href="/help" className="help-link">¿Problemas para iniciar sesión?</a>
       </div>
     </div>

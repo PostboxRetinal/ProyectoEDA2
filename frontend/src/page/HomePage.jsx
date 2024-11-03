@@ -1,6 +1,6 @@
-import "../assets/HomePage.css";
+import "../assets/Homepage.css";
 import { Card } from "react-bootstrap";
-import CarouselEvents from "../components/CarouselEvents";
+import Event from "../components/Event";
 
 function HomePage({ eventos }) {
   return (

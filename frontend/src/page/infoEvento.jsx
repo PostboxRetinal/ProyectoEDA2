@@ -5,16 +5,19 @@ import LugarEvento from "../components/lugarEvento";
 import CommentSystem from "../components/Valoraciones";
 import { useParams } from "react-router-dom";
 
-const Informacion = ({ eventos }) => {
-  const { id } = useParams();
-  const evento = eventos.find(evento => evento.id === id);
-
-  if (!evento) {
-    return <p>Evento no encontrado</p>;
-  }
-
-  const { nombre, descripcion, organizadorId, tipo, categoria, precio, fechaHoraInicio, fechaHoraFin, linkOnline } = evento;
-
+const Informacion = ({
+  nombre = "Pyday",
+  descripcion = "Sin descripción disponible",
+  organizadorId = "Desconocido",
+  tipo = "Presencial",
+  linkOnline = "No disponible",
+  categoria = "Sin categoría",
+  capacidadAsistentes = "No especificado",
+  precio = "Gratis",
+  fechaHoraInicio,
+  fechaHoraFin,
+  direccion = "No especificada"
+}) => {
   return (
     <>
       <Card style={{ width: "80rem", margin: "0 auto", marginTop: "40px" }}>
