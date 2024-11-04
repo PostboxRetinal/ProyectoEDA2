@@ -7,19 +7,35 @@ import Layout from "./Layouts/Layout";
 import AgregarEvento from "./page/AgregarEvento";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
+import ProtectedRoute from "../src/components/ProtectedRoute";
 
 const App = () => {
+  const [eventos, setEventos] = useState([]);
+
+  const agregarEvento = (nuevoEvento) => {
+    setEventos([...eventos, nuevoEvento]);
+  };
+
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/" element={<HomePage />} /> {/* Ruta principal */}
-          <Route path="/HomePage" element={<HomePage />} />
-          <Route path="/Login" element={<IniciarSesion />} />
-          <Route path="/infoEvento/:id" element={<Informacion eventos={eventos} />} />
-          <Route path="/Register" element={<Registro />} />
-          <Route path="/AgregarEvento" element={<AgregarEvento onAgregarEvento={agregarEvento} />} />
           <Route path="/" element={<HomePage eventos={eventos} />} />
+          <Route path="/HomePage" element={<HomePage eventos={eventos} />} />
+          <Route path="/Login" element={<IniciarSesion />} />
+          <Route path="/Register" element={<Registro />} />
+          <Route path="/infoEvento/:id" element={<Informacion eventos={eventos} />} />
+
+          {/* Ruta protegida para agregar eventos */}
+          <Route
+            path="/AgregarEvento"
+            element={
+              <ProtectedRoute>
+                <AgregarEvento onAgregarEvento={agregarEvento} />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
       </Layout>
