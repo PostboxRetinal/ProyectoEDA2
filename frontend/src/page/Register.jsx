@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 
+
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');

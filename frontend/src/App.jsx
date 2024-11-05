@@ -7,8 +7,25 @@ import Layout from "./Layouts/Layout";
 import AgregarEvento from "./page/AgregarEvento";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
+import app from "./firebase/firebase.js";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Login from "./page/Login";
+const auth = getAuth(app);
 
 const App = () => {
+
+  const [usuario, setUsuario] = useState(null);
+
+  onAuthStateChanged(auth, (usuarioFirebase) => {
+    if (usuarioFirebase) {
+      setUsuario(usuarioFirebase);
+    }
+    else {
+      setUsuario(null);
+    }
+  })
+
+
   const [eventos, setEventos] = useState([
     {
       id: '001',
@@ -35,7 +52,7 @@ const App = () => {
           <Route path="/Login" element={<IniciarSesion />} />
           <Route path="/infoEvento/:id" element={<Informacion eventos={eventos} />} />
           <Route path="/Register" element={<Registro />} />
-          <Route path="/AgregarEvento" element={<AgregarEvento onAgregarEvento={agregarEvento} />} />
+          <Route path="/AgregarEvento" element={usuario ? <AgregarEvento onAgregarEvento={agregarEvento}/> : <Login/>} />
           <Route path="/" element={<HomePage eventos={eventos} />} />
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
