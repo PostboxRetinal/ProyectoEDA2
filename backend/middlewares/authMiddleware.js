@@ -3,7 +3,7 @@ const { body, validationResult } = require('express-validator');
 
 // Middleware for registration validation
 const validateRegister = [
-  body('nombre').notEmpty().withMessage('Nombre is required.'),
+  //body('nombre').notEmpty().withMessage('Nombre is required.'),
   body('email').isEmail().withMessage('Please provide a valid email address.'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.'),
   (req, res, next) => {

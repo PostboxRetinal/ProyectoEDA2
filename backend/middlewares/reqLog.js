@@ -1,5 +1,3 @@
-const express = require('express')
-
 const reqLog = (req, res, next) => {
   const { url, method, headers } = req;
   const startTime = Date.now();

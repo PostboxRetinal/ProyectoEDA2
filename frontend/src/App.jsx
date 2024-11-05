@@ -21,9 +21,9 @@ const App = () => {
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage eventos={eventos} />} />
-          <Route path="/HomePage" element={<HomePage eventos={eventos} />} />
-          <Route path="/Login" element={<IniciarSesion />} />
-          <Route path="/Register" element={<Registro />} />
+          <Route path="/homePage" element={<HomePage eventos={eventos} />} />
+          <Route path="/login" element={<IniciarSesion />} />
+          <Route path="/register" element={<Registro />} />
           <Route path="/infoEvento/:id" element={<Informacion eventos={eventos} />} />
 
           {/* Ruta protegida para agregar eventos */}

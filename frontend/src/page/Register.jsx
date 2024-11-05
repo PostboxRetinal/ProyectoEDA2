@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Form, Container, Button } from "react-bootstrap";
 import Api from "../service/Api";
 import '../assets/ProjectCSS/Register.css'; // Asegúrate de importar el CSS
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -9,6 +11,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -23,8 +26,11 @@ const Register = () => {
       return;
     }
 
+    const userData = { username, email, password };
+    console.log("Sending user data:", userData);
+
     try {
-      const response = await Api.post('/register', { username, email, password });
+      const response = await Api.post('/auth/register', userData);
 
       if (response.status === 201) {
         alert("Registro exitoso. Ahora puedes iniciar sesión.");
@@ -32,8 +38,12 @@ const Register = () => {
         alert("Hubo un problema con el registro. Inténtalo de nuevo.");
       }
     } catch (error) {
-      console.error("Error en el registro:", error);
-      alert("Error en el registro. Verifica la información e inténtalo de nuevo.");
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        alert(`Error en el registro: ${error.response.data.message || "Verifica la información e inténtalo de nuevo."}`);
+      } else {
+        alert("Error en el registro. Verifica la información e inténtalo de nuevo.");
+      }
     }
   };
 
@@ -60,18 +70,23 @@ const Register = () => {
               required
             />
           </Form.Group>
-          <Form.Group controlId="formPassword">
+          <Form.Group controlId="formPassword" style={{ position: 'relative' }}>
             <Form.Control
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <FontAwesomeIcon
+              icon={showPassword ? faEyeSlash : faEye}
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ position: 'absolute', right: 10, top: 15, cursor: 'pointer' }}
+            />
           </Form.Group>
-          <Form.Group controlId="formConfirmPassword">
+          <Form.Group controlId="formConfirmPassword" style={{ position: 'relative' }}>
             <Form.Control
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Repetir Contraseña"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}

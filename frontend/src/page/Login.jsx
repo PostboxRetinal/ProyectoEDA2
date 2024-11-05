@@ -17,7 +17,7 @@ function Login({ onLogin }) {
     }
 
     try {
-      const response = await Api.post('/login', { email, password });
+      const response = await Api.post('/auth/login', { email, password });
       const token = response.data.token;
       if (token) {
         localStorage.setItem('token', token);

@@ -16,8 +16,8 @@ dbConnection();
 
 app.use([
   cors({
-    origin: ['localhost'], // allowed domains
-    methods: ['GET', 'POST'], // allowed methods
+    origin: ['localhost:5173'], // allowed domains
+    methods: ['GET', 'POST', 'PUT', 'PATCH'], // allowed methods
     allowedHeaders: ['Content-Type', 'Authorization'] // allowed headers
   }),
   express.json(),

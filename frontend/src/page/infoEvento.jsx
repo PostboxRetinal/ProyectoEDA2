@@ -1,7 +1,7 @@
 import { Card } from "react-bootstrap";
 import "../assets/Homepage.css";
 import FechaEvento from "../components/FechaEvento";
-import LugarEvento from "../components/lugarEvento";
+import LugarEvento from "../components/LugarEvento";
 import CommentSystem from "../components/Valoraciones";
 import { useParams } from "react-router-dom";
 
