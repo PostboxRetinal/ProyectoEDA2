@@ -3,6 +3,7 @@ import { Form, Container, Button } from "react-bootstrap";
 import Api from "../service/Api";
 import '../assets/ProjectCSS/Register.css'; // Asegúrate de importar el CSS
 
+
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
