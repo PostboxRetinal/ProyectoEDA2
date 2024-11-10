@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { Form, Container, Button } from "react-bootstrap";
-import Api from "../service/Api";
-import '../assets/ProjectCSS/Register.css'; // Asegúrate de importar el CSS
+import { Form } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import { Button } from "bootstrap";
+
+import app from "../firebase/firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+const auth = getAuth(app);
 
 
 const Register = () => {
@@ -69,34 +73,14 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-          </Form.Group>
-          <Form.Group controlId="formConfirmPassword">
-            <Form.Control
-              type="password"
-              placeholder="Repetir Contraseña"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </Form.Group>
-          <div className="checkbox-group">
-            <Form.Check
-              type="checkbox"
-              checked={agreeTerms}
-              onChange={(e) => setAgreeTerms(e.target.checked)}
-              label={<span>Acepto los <a href="/terms">términos de servicio</a></span>}
-            />
-          </div>
-          <Button type="submit" className="form-button">
-            Registrarse
-          </Button>
-        </Form>
-        <div className="login-link">
-          ¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a>
-        </div>
-      </div>
-    </Container>
-  );
+            </Form.Group>
+            <h4>{registrando ? "¿Tienes cuenta?" : " "}<Button variant="outline-danger" href="/Login">Iniciar sesion</Button>{' '}</h4>
+            </div>
+
+        </Container>
+    </>
+    );
+
 };
 
 export default Register;
