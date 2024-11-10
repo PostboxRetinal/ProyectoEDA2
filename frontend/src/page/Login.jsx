@@ -3,6 +3,8 @@ import '../assets/Login.css'
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faGoogle, faApple } from '@fortawesome/free-brands-svg-icons';
+import app from '../firebase/firebase';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');

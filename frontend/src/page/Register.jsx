@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { Container } from "react-bootstrap";
+import { Button } from "bootstrap";
+
+import app from "../firebase/firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+const auth = getAuth(app);
 
 
 const Register = () => {
@@ -46,7 +51,9 @@ const Register = () => {
                 required
             />
             </Form.Group>
+            <h4>{registrando ? "¿Tienes cuenta?" : " "}<Button variant="outline-danger" href="/Login">Iniciar sesion</Button>{' '}</h4>
             </div>
+
         </Container>
     </>
     );
