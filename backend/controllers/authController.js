@@ -1,16 +1,11 @@
 require('dotenv').config();
-const bcrypt = require('bcrypt');
-const { firebaseApp } = require('../db/firebaseConnection');
-const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require('firebase/auth');
-const { body, validationResult } = require('express-validator');
-const jwt = require('jsonwebtoken');
-const User = require('../models/usuarioModel'); // Asegúrate de tener el modelo User
-const auth = getAuth(firebaseApp);
 
-// Helper to generate JWT
-const generateJWT = (uid) => {
-  return jwt.sign({ uid }, process.env.JWT_SECRET, { expiresIn: '1h' });
-};
+const dbConnection = require('../db/firebaseConnection');
+const { createUserWithEmailAndPassword, signInWithEmailAndPassword } = require('firebase/auth');
+const { validationResult } = require('express-validator');
+const generateJWT = require('../middlewares/jwt');
+const User = require('../models/usuarioModel'); // Asegúrate de tener el modelo User
+const bcrypt = require('bcrypt');
 
 // Helper function for Firebase error handling
 const getFirebaseErrorMessage = (errorCode) => {
@@ -32,8 +27,11 @@ const getFirebaseErrorMessage = (errorCode) => {
   }
 };
 
-// FIREBASE REGISTER AND CREATE USER IN MONGODB
+const firebaseApp = dbConnection(); // Connect to Firebase
+
+// Firebase registration
 const registerEmailPassword = async (req, res) => {
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: 'Validation failed.', errors: errors.array() });
@@ -41,19 +39,17 @@ const registerEmailPassword = async (req, res) => {
 
   const { nombre, username, email, password, rol = 'Participante' } = req.body;
 
-  let userCredential;
-
   try {
     // Registrar el usuario en Firebase
-    userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    let userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
   } catch(error){
-    const { message, status } = getFirebaseErrorMessage(error.code);
-    return res.status(status || 500).json({ message: message || error.message, errorCode: error.code });
+      const { message, status } = getFirebaseErrorMessage(error.code);
+      return res.status(status || 500).json({ message: message || error.message, errorCode: error.code });
   }
 
   // Hashear la contraseña antes de guardarla en MongoDB
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = bcrypt.hash(password, 10);
 
   // Crear un nuevo usuario en MongoDB con el uid de Firebase
   const newUser = new User({
@@ -66,10 +62,7 @@ const registerEmailPassword = async (req, res) => {
   });
 
   try {
-    // Crear el usuario en MongoDB con la contraseña hasheada
-    await newUser.save();
-
-    // Retornar el usuario registrado
+    await newUser.save();  // Crear el usuario en MongoDB con la contraseña hasheada
     return res.status(201).json({ message: 'User registered successfully.', user: newUser });
 
   } catch (error) {
@@ -77,37 +70,36 @@ const registerEmailPassword = async (req, res) => {
   }
 };
 
-// FIREBASE LOGIN
+// Firebase login
 const loginEmailPassword = async (req, res) => {
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: 'Validation failed.', errors: errors.array() });
   }
 
   const { email, password } = req.body;
+  const firebaseId = userCredential.user.uid;  //
+  const token = generateJWT(firebaseId);
 
   try {
-    // Usar Firebase para autenticar al usuario
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-    // El uid del usuario autenticado
-    const firebaseId = userCredential.user.uid;
-
-    // Opcional: Puedes buscar el usuario en MongoDB para obtener más información
-    const user = await User.findOne({ firebaseId });
-    if (!user) {
-      return res.status(404).json({ message: 'No user found in the database.' });
-    }
-
-    // Generar el token JWT
-    const token = generateJWT(firebaseId);
-
     return res.status(200).json({ message: 'User logged in successfully.', token, user });
-  } catch (error) {
-    const firebaseError = getFirebaseErrorMessage(error.code);
-    return res.status(firebaseError.status).json({ message: firebaseError.message });
-  }
-};
 
+  } catch (error) {
+      const firebaseError = getFirebaseErrorMessage(error.code);
+      return res.status(firebaseError.status).json({ message: firebaseError.message });
+  }
+  // IMPLEMENTACION OPCIONAL: Buscar el usuario en MongoDB
+  // try {
+  //     // Opcional: Puedes buscar el usuario en MongoDB para obtener más información
+  //     const user = await User.findOne({ firebaseId });
+  //     if (!user) {
+  //       return res.status(404).json({ message: 'No user found in the database.' });
+  //     }
+  // } catch (error) {
+
+  // }
+};
 
 module.exports = { registerEmailPassword, loginEmailPassword };
