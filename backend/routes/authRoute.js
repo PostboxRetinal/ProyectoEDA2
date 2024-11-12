@@ -1,20 +1,12 @@
 const express = require('express')
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 const { registerEmailPassword, loginEmailPassword } = require('../controllers/authController');
 const {validateRegister, validateLogin} = require('../middlewares/authMiddleware');
 
 // Route to register a new user
-router.post(
-  '/register',
-  validateRegister,
-  registerEmailPassword
-);
+router.post('/register', validateRegister, registerEmailPassword);
 
 // Route to login user
-router.post(
-  '/login',
-  validateLogin,
-  loginEmailPassword
-);
+router.post('/login', validateLogin, loginEmailPassword);
 
 module.exports = router

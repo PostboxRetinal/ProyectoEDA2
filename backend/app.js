@@ -30,6 +30,7 @@ app.use([
   express.json(),
   express.urlencoded({ extended: true }),
   requestLog,
+
 ]);
 
 app.use('/api/home', homeRoute);
@@ -41,5 +42,5 @@ app.use((req, res, next) => { //Rutas no existentes
 });
 
 app.listen(PORT, () => {
-  console.log(`-----\n meetusBackend v${VERSION}\n Running on port ${PORT} \n -----`);
+  console.log(`-----\n meetusBackend v${VERSION}\n Running on port ${PORT} \n-----`);
 });

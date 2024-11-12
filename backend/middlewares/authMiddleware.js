@@ -3,13 +3,13 @@ const { body, validationResult } = require('express-validator');
 
 // Middleware for registration validation
 const validateRegister = [
-  //body('nombre').notEmpty().withMessage('Nombre is required.'),
-  body('email').isEmail().withMessage('Please provide a valid email address.'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.'),
+  body('email').isEmail().withMessage('Asegúrate de ingresar un correo válido'),
+  body('password').isStrongPassword().withMessage('Tu contraseña debe tener al menos 6 caracteres, una letra mayúscula, una minúscula, un número y un símbolo'),
+  body('password').notEmpty().withMessage('La contraseña no puede estar vacía'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ message: 'Validation failed.', errors: errors.array() });
+      return res.status(400).json({ message: 'Validación fallida: ', errors: errors.array() });
     }
     next();
   },
@@ -17,12 +17,12 @@ const validateRegister = [
 
 // De manera similar para el login
 const validateLogin = [
-  body('email').isEmail().withMessage('Please provide a valid email address.'),
-  body('password').notEmpty().withMessage('Password cannot be empty.'),
+  body('email').isEmail().withMessage('Asegúrate de ingresar un correo válido'),
+  body('password').notEmpty().withMessage('La contraseña no puede estar vacía'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ message: 'Validation failed.', errors: errors.array() });
+      return res.status(400).json({ message: 'Validación fallida', errors: errors.msg });
     }
     next();
   },
