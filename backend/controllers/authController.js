@@ -4,8 +4,6 @@ const dbConnection = require('../db/firebaseConnection');
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require('firebase/auth');
 const { validationResult } = require('express-validator');
 const generateJWT = require('../middlewares/jwt');
-const { FirebaseError } = require('firebase/app');
-
 
 // Helper function for Firebase error handling
 const getFirebaseErrorMessage = (errorCode) => {
@@ -23,7 +21,7 @@ const getFirebaseErrorMessage = (errorCode) => {
     case 'auth/invalid-credential':
       return { message: 'Credenciales inválidas. Intenta nuevamente', status: 400 };
     default:
-      return { message: '', status: 500 };
+      return { message: errorCode, status: 500 };
   }
 };
 
@@ -46,6 +44,7 @@ const registerEmailPassword = async (req, res) => {
 
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    console.log(`201 - Usuario registrado correctamente con UID: ${userCredential.user.uid}`);
     return res.status(201).json({ message: 'Usuario registrado correctamente', userUID: userCredential.user.uid });
 
   } catch (error) {
@@ -61,21 +60,20 @@ const registerEmailPassword = async (req, res) => {
 const loginEmailPassword = async (req, res) => {
 
   validation(req);
-
   const { email, password } = req.body;
-  const firebaseId = userCredential.user.uid;
-  const token = generateJWT(firebaseId);
 
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return res.status(200).json({ message: 'Usuario loggeado correctamente', token, user });
+    const firebaseId = userCredential.user.uid;
+    const token = generateJWT(firebaseId);
+    return res.status(201).json({ message: 'Usuario loggeado correctamente', token, firebaseId });
 
   } catch (error) {
-      // Handle Firebase error
+    // Handle Firebase error
     const errorCode = error.code;
     const firebaseError= getFirebaseErrorMessage(errorCode);
-    console.error(`${firebaseError.status} - ${firebaseError.message}`);
-    return res.status(firebaseError.status).json({ message: firebaseError.message });
+    console.error(`${firebaseError.status} - ${error}`);
+    return res.status(firebaseError.status).json({ message: error });
   }
   // IMPLEMENTACION OPCIONAL: Buscar el usuario en MongoDB
   // // Hashear la contraseña antes de guardarla en MongoDB
