@@ -33,7 +33,9 @@ const authMiddleware = (req, res, next) => {
   const token = req.header('Authorization')?.split(' ')[1];
 
   if (!token) {
+    console.error(`401 - Acceso denegado. No hay token.`);
     return res.status(401).json({ message: 'Acceso denegado. No hay token.' });
+
   }
 
   try {

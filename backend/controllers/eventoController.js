@@ -1,7 +1,36 @@
-const mongoose = require('mongoose')
 const { validationResult } = require('express-validator');
-const Evento = require('../models/eventoModel');
-const Usuario = require('../models/usuarioModel')
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
+const dbConnection = require('../db/firebaseConnection');
+
+dbConnection();
+
+const firebaseCrearEvento = async (req, res) => {
+  initializeApp({
+    credential: cert(serviceAccount)
+  });
+
+  const db = getFirestore();
+
+  const data = {
+    nombre,
+    descripcion,
+    organizadorId,
+    tipo,
+    fechaHoraInicio,
+    fechaHoraFin,
+    lugar,
+    linkOnline,
+    categoria,
+    capacidadAsistentes,
+    precio,
+  };
+
+  // Add a new document in collection "cities" with ID 'LA'
+  res = await db.collection('cities').doc('LA').set(data);
+
+}
 
 const crearEvento = async (req, res) => {
   const errors = validationResult(req);
@@ -127,6 +156,7 @@ const obtenerEventoPorId = async (req, res) => {
 // };
 
 module.exports = {
+  firebaseCrearEvento,
   crearEvento,
   obtenerEventos,
   obtenerEventoPorId,

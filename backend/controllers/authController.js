@@ -5,6 +5,10 @@ const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = 
 const { validationResult } = require('express-validator');
 const generateJWT = require('../middlewares/jwt');
 
+// Connect to Firebase
+dbConnection();
+const auth = getAuth();
+
 // Helper function for Firebase error handling
 const getFirebaseErrorMessage = (errorCode) => {
   switch (errorCode) {
@@ -24,10 +28,6 @@ const getFirebaseErrorMessage = (errorCode) => {
       return { message: errorCode, status: 500 };
   }
 };
-
-// Connect to Firebase
-dbConnection();
-const auth = getAuth();
 
 // Middleware for registration validation
 const validation = (req) => {

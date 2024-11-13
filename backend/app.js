@@ -35,7 +35,7 @@ app.use([
 
 app.use('/api/home', homeRoute);
 app.use('/api/auth', authRoutes);
-app.use('/api/events', authMiddleware, eventoRoutes);
+app.use('/api/event', authMiddleware, eventoRoutes);
 
 //Rutas no existentes
 app.use((req, res, next) => {
@@ -44,4 +44,5 @@ app.use((req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`-----\n meetusBackend v${VERSION}\n Running on port ${PORT} \n-----`);
+  console.log(`[${new Date().toISOString()}] --- SERVER STARTED`);
 });
