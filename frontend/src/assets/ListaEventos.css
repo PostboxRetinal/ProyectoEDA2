@@ -1,4 +1,12 @@
 /* Container for the event list */
+.title {
+  font-size: 45px;
+  color: #333;
+  margin-bottom: 10px;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+}
+
 .event-list-container {
   text-align: center;
   background-color: #f0f4f8;

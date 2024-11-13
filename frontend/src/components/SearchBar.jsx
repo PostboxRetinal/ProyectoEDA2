@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { db } from '../firebase/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { SearchContext } from '../Context/SearchContext';
+import { useNavigate } from 'react-router-dom';
+import '../assets/SearchBar.css';
 
 const SearchBar = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const { searchTerm } = useContext(SearchContext);
   const [eventos, setEventos] = useState([]);
   const [filteredEventos, setFilteredEventos] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEventos = async () => {
@@ -24,41 +28,23 @@ const SearchBar = () => {
 
   useEffect(() => {
     const results = eventos.filter(evento =>
-      evento.Name && evento.Name.toLowerCase().includes(searchTerm.toLowerCase())
+      evento.Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    console.log("Resultados filtrados:", results);
     setFilteredEventos(results);
   }, [searchTerm, eventos]);
 
   return (
-    <div style={{ margin: '20px' }}>
-      <input
-        type="text"
-        placeholder="Buscar eventos por nombre..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{
-          width: '100%',
-          padding: '10px',
-          marginBottom: '20px',
-          border: '1px solid #ccc',
-          borderRadius: '4px'
-        }}
-      />
-      <div>
+    <div className="search-bar">
+      <div className="event-list">
         {filteredEventos.map((evento) => (
-          <div key={evento.id} style={{
+          <div key={evento.id} className="event-item" style={{
             padding: '10px',
             border: '1px solid #ccc',
             borderRadius: '4px',
-            marginBottom: '10px'
-          }}>
+            marginBottom: '20px'}}>
             <h2>{evento.Name}</h2>
             <p>{evento.Description}</p>
-            <p>{evento.Date}</p>
-            <p>{evento.Modality}</p>
-            <p>{evento.Place}</p>
-            <a href={evento.Link}>Más información</a>
+            <button className="update-button" onClick={() => navigate(`/InfoEvento/${evento.id}`)}>Saber más</button>
           </div>
         ))}
       </div>

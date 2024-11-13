@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { db } from "../firebase/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import '../assets/AgregarEvento.css'; // Usa el mismo archivo CSS de AgregarEvento
 
 const ActualizarEvento = () => {
   const { id } = useParams();
@@ -15,10 +16,8 @@ const ActualizarEvento = () => {
   useEffect(() => {
     const fetchEvento = async () => {
       try {
-        console.log("Fetching event with ID:", id);
         const eventoDoc = await getDoc(doc(db, "Eventos", id));
         if (eventoDoc.exists()) {
-          console.log("Evento encontrado:", eventoDoc.data());
           const eventoData = eventoDoc.data();
           setNewName(eventoData.Name);
           setNewDescription(eventoData.Description);
@@ -54,19 +53,31 @@ const ActualizarEvento = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>Actualizar Evento</h1>
       <form onSubmit={(e) => { e.preventDefault(); updateEvento(); }}>
+        <label>Nombre evento:</label>
         <input type="text" placeholder="Nombre" value={newName} onChange={(event) => setNewName(event.target.value)} />
-        <input type="text" placeholder="Description" value={newDescription} onChange={(event) => setNewDescription(event.target.value)} />
+
+        <label>Fecha y hora:</label>
         <input type="datetime-local" placeholder="Fecha y Hora" value={newDate} onChange={(event) => setNewDate(event.target.value)} />
+
+        <label>Lugar:</label>
+        <input type="text" placeholder="Lugar" value={newPlace} onChange={(event) => setNewPlace(event.target.value)} />
+
+        <label>Link:</label>
+        <input type="text" placeholder="Link" value={newLink} onChange={(event) => setNewLink(event.target.value)} />
+
+        <label>Modality:</label>
         <select value={newModality} onChange={(event) => setNewModality(event.target.value)}>
           <option value="">Seleccionar Modalidad</option>
           <option value="virtual">Virtual</option>
           <option value="presencial">Presencial</option>
         </select>
-        <input type="text" placeholder="Lugar" value={newPlace} onChange={(event) => setNewPlace(event.target.value)} />
-        <input type="text" placeholder="Link" value={newLink} onChange={(event) => setNewLink(event.target.value)} />
+
+        <label>Descripcion:</label>
+        <textarea placeholder="Descripción" value={newDescription} onChange={(event) => setNewDescription(event.target.value)} />
+
         <button type="submit">Actualizar Evento</button>
       </form>
     </div>

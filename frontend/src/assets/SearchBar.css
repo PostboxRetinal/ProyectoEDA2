@@ -1,0 +1,63 @@
+/* Estilo principal del contenedor de la barra de búsqueda */
+.search-bar {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Lista de eventos */
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Cada elemento de evento */
+.event-item {
+  background-color: #ffffff;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos de título y descripción */
+.event-item h2 {
+  font-size: 1.5em;
+  color: #333;
+  margin: 0 0 8px;
+}
+
+.event-item p {
+  font-size: 1em;
+  color: #666;
+  margin: 4px 0;
+}
+
+/* Link para más información */
+.event-item a {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 16px;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #007bff;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.event-item a:hover {
+  background-color: #0056b3;
+}

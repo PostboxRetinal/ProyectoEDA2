@@ -49,7 +49,7 @@ const ListaEventos = () => {
 
   return (
     <div className="event-list-container">
-      <h1>¿Qué hay para hacer?</h1>
+      <h1 className="title">¿Qué hay para hacer?</h1>
       {eventos.length === 0 ? (
         <p>No hay eventos disponibles.</p>
       ) : (
@@ -59,10 +59,6 @@ const ListaEventos = () => {
             <div className="event-info">
               <h2>{evento.Name}</h2>
               <p>{evento.Description}</p>
-              <p>{evento.Date}</p>
-              <p>{evento.Modality}</p>
-              <p>{evento.Place}</p>
-              <a href={evento.Link}>Más información</a>
             </div>
             <div className="event-buttons">
               <button className="update-button" onClick={() => navigate(`/InfoEvento/${evento.id}`)}>Saber más</button>

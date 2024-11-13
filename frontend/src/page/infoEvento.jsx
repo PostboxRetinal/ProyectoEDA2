@@ -44,7 +44,9 @@ const InfoEvento = () => {
   return (
     <div className='Color'>
       <div className='margin'>
-      <h1 className='h1'>{evento.Name}</h1>
+        <div className='evento-nombre'>
+          <h1>{evento.Name}</h1>
+        </div>
       <div className='info-header'>
         <img src={getRandomImage()} alt="Evento" className='evento-imagen' />
         <div className='evento-date'>
