@@ -12,7 +12,7 @@ import virtual from "../assets/imagenes/EventoWeb_image.png";
 
 const ListaEventos = () => {
   const [eventos, setEventos] = useState([]);
-  const eventoCollectionRef = collection(db, 'Eventos');
+  const eventoCollectionRef = collection(db, 'eventos');
   const navigate = useNavigate();
 
   const imagenes = [presencial, virtual];

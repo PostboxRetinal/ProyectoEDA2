@@ -14,7 +14,7 @@ const AgregarEvento = () => {
   const [newPlace, setNewPlace] = useState('');
   const [newLink, setNewLink] = useState('');
 
-  const eventoCollectionRef = collection(db, 'Eventos');
+  const eventoCollectionRef = collection(db, 'eventos');
 
   const addEvento = async () => {
     try {
