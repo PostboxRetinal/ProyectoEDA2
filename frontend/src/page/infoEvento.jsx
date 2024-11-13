@@ -1,48 +1,75 @@
-import { Card } from "react-bootstrap";
-import "../assets/Homepage.css";
-import FechaEvento from "../components/FechaEvento";
-import LugarEvento from "../components/lugarEvento";
-import CommentSystem from "../components/Valoraciones";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { db } from '../firebase/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import '../assets/InfoEvento.css';
 
-const Informacion = ({
-  nombre = "Pyday",
-  descripcion = "Sin descripción disponible",
-  organizadorId = "Desconocido",
-  tipo = "Presencial",
-  linkOnline = "No disponible",
-  categoria = "Sin categoría",
-  capacidadAsistentes = "No especificado",
-  precio = "Gratis",
-  fechaHoraInicio,
-  fechaHoraFin,
-  direccion = "No especificada"
-}) => {
+//imagenes
+import presencial from "../assets/imagenes/Evento_image.jpg";
+import virtual from "../assets/imagenes/EventoWeb_image.png";
+
+
+//iconos
+import { CiTimer } from "react-icons/ci";
+import { MdPlace } from "react-icons/md";
+
+const InfoEvento = () => {
+  const { id } = useParams();
+  const [evento, setEvento] = useState(null);
+
+  const imagenes = [presencial, virtual];
+
+  useEffect(() => {
+    const fetchEvento = async () => {
+      try {
+        const eventoDoc = await getDoc(doc(db, 'Eventos', id)); // Asegúrate de que el nombre de la colección sea correcto
+        if (eventoDoc.exists()) {
+          setEvento(eventoDoc.data());
+        } else {
+          console.error('No se encontró el evento');
+        }
+      } catch (error) {
+        console.error('Error obteniendo el evento:', error);
+      }
+    };
+    fetchEvento();
+  }, [id]);
+
+  const getRandomImage = () => {
+    return imagenes[Math.floor(Math.random() * imagenes.length)];
+  }
+
+  if (!evento) return <div>Cargando...</div>;
+
   return (
-    <>
-      <Card style={{ width: "80rem", margin: "0 auto", marginTop: "40px" }}>
-        <Card.Header>
-          <h2>{nombre}</h2>
-        </Card.Header>
-        <Card.Body>
-          <p>
-            El evento hecho por: {organizadorId}. {descripcion}
-          </p>
-          <p>{linkOnline}</p>
-          <p>categoría: {categoria}</p>
-          <FechaEvento fechaHoraInicio={fechaHoraInicio} fechaHoraFin={fechaHoraFin} />
-          <LugarEvento lugar={evento.lugar} />
-          <p>Precio: {precio}</p>
-        </Card.Body>
-        <Card.Footer>
-          <div>
-            <span>Tipo:</span> {tipo}
+    <div className='Color'>
+      <div className='margin'>
+      <h1 className='h1'>{evento.Name}</h1>
+      <div className='info-header'>
+        <img src={getRandomImage()} alt="Evento" className='evento-imagen' />
+        <div className='evento-date'>
+          <CiTimer style={{fontSize:'50px', marginLeft:'90px'}}/>
+          <p>{evento.Date}</p>
+        </div>
+      </div>
+      <div className='info-body'>
+        <p className='evento-descripcion'>{evento.Description}</p>
+        <div className='evento-place'>
+          <div className='lugar-icon'>
+            <MdPlace />
           </div>
-          <CommentSystem valoraciones={evento.valoraciones} />
-        </Card.Footer>
-      </Card>
-    </>
+          <div>
+            <p>{evento.Place}</p>
+          </div>
+        </div>
+      </div>
+      <div className='evento-modalidad'>
+        <p>{evento.Modality}</p>
+      </div>
+      <a href={evento.Link} target='_blank' className='evento-masinfo'>Más información</a>
+      </div>
+    </div>
   );
 };
 
-export default Informacion;
+export default InfoEvento;

@@ -1,0 +1,22 @@
+/* Footer.css */
+.footer {
+  background-color: #2e3a49; /* Dark background color */
+  padding: 10px 0;
+  text-align: center;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer .line {
+  width: 100px;
+  border-top: 1px solid white;
+  margin: 0 15px;
+}
+
+.footer .text {
+  font-size: 16px;
+  color: #c0c0c0; /* Light grey color for text */
+}
