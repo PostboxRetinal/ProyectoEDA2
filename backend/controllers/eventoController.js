@@ -1,7 +1,40 @@
-const mongoose = require('mongoose')
+const {getFirebaseErrorMessage} = require('../helpers/firebaseErrors');
 const { validationResult } = require('express-validator');
-const Evento = require('../models/eventoModel');
-const Usuario = require('../models/usuarioModel')
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+const dbConnection = require('../db/firebaseConnection');
+
+dbConnection();
+
+const firebaseCrearEvento = async (req, res) => {
+  initializeApp({
+    credential: cert(serviceAccount)
+  });
+
+  const db = getFirestore();
+
+  const { newName, newDescription, newDate, newModality, newPlace, newLink } = req.body;
+
+  const data = {
+    nombre: newName,
+    descripcion: newDescription,
+    fecha: newDate,
+    modalidad: newModality,
+    lugar: newPlace,
+    link: newLink
+  };
+  try {
+    firestoreRes = await db.collection('eventos').add(data);
+  } catch (error) {
+    const errorCode = error.code;
+    const firebaseErrors = getFirebaseErrorMessage(errorCode)
+    console.error(`${firebaseErrors.status} - ${error}`);
+    return res.status(firebaseErrors.status).json({ message: firebaseErrors.message });
+  }
+
+
+}
 
 const crearEvento = async (req, res) => {
   const errors = validationResult(req);
@@ -127,6 +160,7 @@ const obtenerEventoPorId = async (req, res) => {
 // };
 
 module.exports = {
+  firebaseCrearEvento,
   crearEvento,
   obtenerEventos,
   obtenerEventoPorId,

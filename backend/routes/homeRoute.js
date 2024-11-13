@@ -3,7 +3,7 @@ const router = express.Router()
 
 // Home route
 router.get('/', (req, res) => {
-  res.send('Bienvenido a la API de MeetUs');
+  res.status(200).send('Bienvenido a la API de MeetUs');
 });
 
 module.exports = router
