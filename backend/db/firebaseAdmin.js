@@ -3,7 +3,7 @@ const { initializeApp, applicationDefault, cert } = require('firebase-admin/app'
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
-const dbFirestore = () => {
+const firebaseAdmin = () => {
 
   try {
     initializeApp({
@@ -18,4 +18,4 @@ const dbFirestore = () => {
   }
 };
 
-module.exports = dbFirestore;
+module.exports = firebaseAdmin;

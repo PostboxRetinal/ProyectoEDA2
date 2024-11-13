@@ -1,4 +1,5 @@
 require('dotenv').config()
+
 const express = require('express');
 const cors = require('cors');
 const dbConnection = require('./db/firebaseConnection');
@@ -25,7 +26,7 @@ app.use([
   cors({
     origin: ['localhost:5173'], // allowed domains
     methods: ['GET', 'POST', 'PUT', 'PATCH'], // allowed methods
-    allowedHeaders: ['Content-Type', 'Authorization',   ] // allowed headers
+    allowedHeaders: ['Content-Type', 'Authorization'  ] // allowed headers
   }),
   express.json(),
   express.urlencoded({ extended: true }),

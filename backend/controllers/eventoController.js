@@ -1,7 +1,8 @@
+const {getFirebaseErrorMessage} = require('../helpers/firebaseErrors');
 const { validationResult } = require('express-validator');
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 const dbConnection = require('../db/firebaseConnection');
 
 dbConnection();
@@ -13,22 +14,25 @@ const firebaseCrearEvento = async (req, res) => {
 
   const db = getFirestore();
 
-  const data = {
-    nombre,
-    descripcion,
-    organizadorId,
-    tipo,
-    fechaHoraInicio,
-    fechaHoraFin,
-    lugar,
-    linkOnline,
-    categoria,
-    capacidadAsistentes,
-    precio,
-  };
+  const { newName, newDescription, newDate, newModality, newPlace, newLink } = req.body;
 
-  // Add a new document in collection "cities" with ID 'LA'
-  res = await db.collection('cities').doc('LA').set(data);
+  const data = {
+    nombre: newName,
+    descripcion: newDescription,
+    fecha: newDate,
+    modalidad: newModality,
+    lugar: newPlace,
+    link: newLink
+  };
+  try {
+    firestoreRes = await db.collection('eventos').add(data);
+  } catch (error) {
+    const errorCode = error.code;
+    const firebaseErrors = getFirebaseErrorMessage(errorCode)
+    console.error(`${firebaseErrors.status} - ${error}`);
+    return res.status(firebaseErrors.status).json({ message: firebaseErrors.message });
+  }
+
 
 }
 
