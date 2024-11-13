@@ -1,19 +1,25 @@
 require('dotenv').config();
 
+const dbFirestore = require('../db/firestore');
 const dbConnection = require('../db/firebaseConnection');
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require('firebase/auth');
+const {GoogleAuthProvider} = require('firebase/auth');
+const {getFirestore} = require('firebase-admin/firestore');
 const { validationResult } = require('express-validator');
 const generateJWT = require('../middlewares/jwt');
 
 // Connect to Firebase
 dbConnection();
+dbFirestore();
+const provider = new GoogleAuthProvider();
+const db = getFirestore();
 const auth = getAuth();
 
 // Helper function for Firebase error handling
 const getFirebaseErrorMessage = (errorCode) => {
   switch (errorCode) {
     case 'auth/email-already-in-use':
-      return { message: 'Ese correo ya se encuentra registrado', status: 409 };
+      return { message: 'Ese correo ya se encuentra registrado. Elige otro', status: 409 };
     case 'auth/invalid-email':
       return { message: 'Formato de correo inválido', status: 400 };
     case 'auth/password-does-not-meet-requirements':
@@ -38,20 +44,44 @@ const validation = (req) => {
 }
 
 const registerEmailPassword = async (req, res) => {
-
   validation(req);
-  const { email, password, rol = 'Participante' } = req.body;
+  let uid;
+
+  const { email, username, password, rol } = req.body;
+
+  const data = {
+    email: email,
+    username: username,
+    rol: rol,
+    fechaCreacion: new Date().toISOString()
+  };
+
+  // existe?
+  try {
+    const usernameQuery = await db.collection('usuarios').where('username', '==', username).get();
+    if (!usernameQuery.empty) {
+      return res.status(409).json({ message: 'Nombre de usuario ya se encuentra en uso. Elige otro' });
+    }
+  } catch (error) {
+    const errorCode = error.code;
+    const firebaseError= getFirebaseErrorMessage(errorCode);
+    console.error(`${firebaseError.status} - ${error}`);
+    return res.status(firebaseError.status).json({ message: firebaseError.message });
+  }
+
 
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    console.log(`201 - Usuario registrado correctamente con UID: ${userCredential.user.uid}`);
-    return res.status(201).json({ message: 'Usuario registrado correctamente', userUID: userCredential.user.uid });
+    uid = userCredential.user.uid;
+
+    const firestoreRes = await db.collection('usuarios').doc(uid).set(data); // guardar en firestore
+    console.log(`201 - Usuario registrado correctamente con UID: ${uid}`);
+    return res.status(201).json({ message: 'Usuario registrado correctamente', userUID: uid });
 
   } catch (error) {
-    // Handle Firebase error
     const errorCode = error.code;
     const firebaseError= getFirebaseErrorMessage(errorCode);
-    console.error(`${firebaseError.status} - ${firebaseError.message}`);
+    console.error(`${firebaseError.status} - ${error}`);
     return res.status(firebaseError.status).json({ message: firebaseError.message });
   }
 };
@@ -75,36 +105,6 @@ const loginEmailPassword = async (req, res) => {
     console.error(`${firebaseError.status} - ${error}`);
     return res.status(firebaseError.status).json({ message: error });
   }
-  // IMPLEMENTACION OPCIONAL: Buscar el usuario en MongoDB
-  // // Hashear la contraseña antes de guardarla en MongoDB
-  // const hashedPassword = bcrypt.hash(password, 10);
-
-  // // Crear un nuevo usuario en MongoDB con el uid de Firebase
-  // const newUser = new User({
-  //   nombre,
-  //   username,
-  //   email,
-  //   rol,
-  //   hashedPassword,
-  //   firebaseId: userCredential.user.uid,
-  // });
-  //
-  // try {
-  //     // Opcional: Puedes buscar el usuario en MongoDB para obtener más información
-  //     const user = await User.findOne({ firebaseId });
-  //     if (!user) {
-  //       return res.status(404).json({ message: 'No user found in the database.' });
-  //     }
-  // } catch (error) {
-
-  // }
-  // try {
-  //   await newUser.save();  // Crear el usuario en MongoDB con la contraseña hasheada
-  //   return res.status(201).json({ message: 'User registered successfully.', user: newUser });
-
-  // } catch (error) {
-  //     return res.status(500).json({ message: 'Error registering user.', error: error.message });
-  // }
 
 };
 
