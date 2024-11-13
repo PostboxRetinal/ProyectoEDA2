@@ -4,6 +4,9 @@ import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "../assets/ListaEventos.css";
 
+import Swal from 'sweetalert2';
+import '@sweetalert2/themes/wordpress-admin/wordpress-admin.min.css';
+
 import presencial from "../assets/imagenes/Evento_image.jpg";
 import virtual from "../assets/imagenes/EventoWeb_image.png";
 
@@ -35,11 +38,23 @@ const ListaEventos = () => {
   const deleteEvento = async (id) => {
     try {
       await deleteDoc(doc(db, "Eventos", id));
-      alert("Evento eliminado exitosamente");
+      Swal.fire({
+        title: 'Evento eliminado exitosamente',
+        text: 'El evento ha sido eliminado correctamente',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false
+      })
       setEventos(eventos.filter(evento => evento.id !== id));
     } catch (error) {
       console.error("Error eliminando el evento:", error);
-      alert("Error eliminando el evento");
+      Swal.fire({
+        title: 'Error eliminando el evento',
+        text: 'Ha ocurrido un error al intentar eliminar el evento',
+        icon: 'error',
+        timer: 1200,
+        showConfirmButton: false
+      })
     }
   }
 

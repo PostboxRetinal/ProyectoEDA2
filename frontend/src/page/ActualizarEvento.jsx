@@ -2,7 +2,10 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { db } from "../firebase/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import '../assets/AgregarEvento.css'; // Usa el mismo archivo CSS de AgregarEvento
+import '../assets/AgregarEvento.css';
+
+import Swal from 'sweetalert2';
+import '@sweetalert2/themes/wordpress-admin/wordpress-admin.min.css';
 
 const ActualizarEvento = () => {
   const { id } = useParams();
@@ -45,10 +48,22 @@ const ActualizarEvento = () => {
         Place: newPlace,
         Link: newLink
       });
-      alert("Evento actualizado exitosamente");
+      Swal.fire({
+        title: 'Evento actualizado exitosamente',
+        text: 'El evento ha sido actualizado correctamente',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false
+      })
     } catch (error) {
       console.error("Error actualizando el evento:", error);
-      alert("Error actualizando el evento");
+      Swal.fire({
+        title: 'Error actualizando el evento',
+        text: 'Ha ocurrido un error al intentar actualizar el evento',
+        icon: 'error',
+        timer: 1200,
+        showConfirmButton: false
+      })
     }
   }
 
