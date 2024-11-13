@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SearchContext } from '../context/SearchContext';
+import { SearchContext } from '../Context/SearchContext';
 import '../assets/Navbar.css';
 
 function Navbar() {
