@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const dbFirestore = require('../db/firebaseAdmin');
 const dbConnection = require('../db/firebaseConnection');
-const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require('firebase/auth');
+const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } = require('firebase/auth');
 const {GoogleAuthProvider} = require('firebase/auth');
 const {getFirestore} = require('firebase-admin/firestore');
 const { validationResult } = require('express-validator');
@@ -53,7 +53,10 @@ const registerEmailPassword = async (req, res) => {
 
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
     uid = userCredential.user.uid;
+
+    await sendEmailVerification(user); // Enviar correo de verificación
 
     const firestoreRes = await db.collection('usuarios').doc(uid).set(data); // guardar en firestore
     console.log(`201 - Usuario registrado correctamente con UID: ${uid}`);
